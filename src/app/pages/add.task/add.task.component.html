@@ -1,0 +1,115 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Task Form</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <h1>Task Manager</h1>
+            <form [formGroup]="form" (ngSubmit)="editingTask ? updateTask() : addTask()">
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="title">Title:</label>
+                    <input id="title" [(ngModel)]="taskTitle" name="title" formControlName="title" class="form-control">
+                    <div class="text-danger"
+                        *ngIf="form.controls['title'].invalid && (form.controls['title'].touched || form.controls['title'].dirty)">
+                        <span class="error" *ngIf="(titleError$ | async)">{{ titleError$ | async }}</span>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="description">Description:</label>
+                    <input id="description" [(ngModel)]="taskDescription" name="description"
+                        formControlName="description" class="form-control">
+                    <div class="text-danger"
+                        *ngIf="form.controls['description'].invalid && (form.controls['description'].touched || form.controls['description'].dirty)">
+                        <span class="error" *ngIf="(descriptionError$ | async)">{{ descriptionError$ | async }}</span>
+                    </div>
+                </div>
+                <button class="btn btn-success" type="submit">{{ editingTask ? 'Update Task' : 'Add Task' }}</button>
+                <button type="button" *ngIf="editingTask" (click)="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</ng-template>
+<div class="row mt-5">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title" style="float:left;">
+                    Add Task
+                </h5>
+                <div class="card-toolbar" style="position: relative;">
+                    <button class="btn btn-primary" style="float: right;" (click)="addTaskClick(content)">
+                        Task Form
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>
+
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Title</th>
+			<th scope="col">Description</th>
+			<th scope="col">Update</th>
+			<th scope="col">Delete</th>
+			<th scope="col">Complete</th>
+		</tr>
+	</thead>
+	<tbody>
+		
+			<tr *ngFor="let task of tasks$ | async ">
+				<td>
+					{{ task.id }}
+				</td>
+				<td>{{ task.title }}</td>
+				<td>{{ task.description }}</td>
+				<td><button (click)="editTask(task)" class="btn btn-warning" >Edit</button></td>
+				<td><button (click)="openSm(longContent)" class="btn btn-danger"> Delete </button></td>
+				<td><button (click)="completeTask(task.id)" class="btn btn-success"> Complete </button></td>
+                
+                <ng-template #content let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+                    </div>
+                </ng-template>
+                
+                <ng-template #longContent let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure the task will be deleted...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="deleteTask(task.id);modal.close('Close click')">Delete</button>
+                        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+                    </div>
+                </ng-template>
+                
+                
+                
+			</tr>
+		
+	</tbody>
+    
+</table>
+
+
+

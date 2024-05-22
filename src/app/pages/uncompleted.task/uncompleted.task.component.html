@@ -1,0 +1,60 @@
+<!-- butona tıklayarak nesnelerimizi çağırıyoruz -->
+<button class="btn btn-secondary" (click)="loadTasks()">Get Uncompleted Tasks</button>
+<table class="table table-striped">
+    
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Title</th>
+			<th scope="col">Description</th>
+			<th scope="col">Update</th>
+			<th scope="col">Delete</th>
+			<th scope="col">Complete</th>
+		</tr>
+	</thead>
+	<tbody>
+            <!-- Task listemizin içinde dönerek verileri yazdırıyoruz -->
+			<tr *ngFor="let task of tasks$ | async ">
+				<td>
+					{{ task.id }}
+				</td>
+				<td>{{ task.title }}</td>
+				<td>{{ task.description }}</td>
+				<td><button (click)="editTask(task)" class="btn btn-warning" >Edit</button></td>
+				<td><button (click)="openSm(longContent)" class="btn btn-danger"> Delete </button></td>
+				<td><button (click)="completeTask(task.id)" class="btn btn-success"> Complete </button></td>
+                
+                <ng-template #content let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+                    </div>
+                </ng-template>
+                
+                <ng-template #longContent let-modal>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Modal title</h4>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure the task will be deleted...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" (click)="deleteTask(task.id);modal.close('Close click')">Delete</button>
+                        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+                    </div>
+                </ng-template>
+                
+                
+                
+			</tr>
+		
+	</tbody>
+    
+</table>

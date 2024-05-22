@@ -1,0 +1,26 @@
+<!-- butona tıklayarak nesnelerimizi çağırıyoruz -->
+<button class="btn btn-secondary" (click)="loadTasks()">Get Completed Tasks</button>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Title</th>
+			<th scope="col">Description</th>
+            <th scope="col">Status</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+            <!-- Task listemizin içinde dönerek verileri yazdırıyoruz -->
+			<tr *ngFor="let task of tasks$ | async ">
+				<td>
+					{{ task.id }}
+				</td>
+				<td>{{ task.title }}</td>
+				<td>{{ task.description }}</td>
+				<td>Completed</td>
+			</tr>
+		
+	</tbody>
+    
+</table>

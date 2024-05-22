@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable, map, startWith } from 'rxjs';
 import { CompletedTask, Task } from '../../models/task.model';
-import { addTask, deleteTask, updateTask } from '../../store/actions/action';
+import { addTask, deleteTask, setTasks, updateTask } from '../../store/actions/action';
 import { selectAllTasks } from '../../store/selectors/task.selectors'
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -72,24 +72,26 @@ export class UncompletedTaskComponent {
       map(status => status === 'VALID')
     );
   }
-
+  ngOnInit(): void {
+    this.loadTasks();
+  }
 //verileri api aracılığı ile alıp storumuza kaydediyoruz
   loadTasks() {
     this.taskService.getUncompletedTasks().subscribe(tasks => {
-     
-      tasks.forEach(task => this.store.dispatch(addTask({ task })));
+      this.store.dispatch(setTasks({ tasks }));
+      //tasks.forEach(task => this.store.dispatch(addTask({ task })));
     });
   }
   //seçtiğimiz taskın idsini kullanarak delete işlemini tamamlıyoruz
   deleteTask(taskId: number) {
-    debugger
+
     this.taskService.deleteTask(taskId).subscribe(() => {
       this.store.dispatch(deleteTask({ taskId }));
     });
   }
   //editlemek için seçtiğimiz taskın verilerini inputa yazdırıyoruz
   editTask(task: Task) {
-    debugger
+
     this.editingTask = task;
     this.taskTitle = task.title;
     this.taskDescription = task.description;
@@ -104,7 +106,7 @@ export class UncompletedTaskComponent {
   }
   //inputlara gelen verileri değiştirip güncellemeyi tamamlıyoruz
   updateTask() {
-    debugger
+
     if (this.editingTask && this.form.valid) {
       const updatedTask: Task = { ...this.editingTask, title: this.taskTitle, description: this.taskDescription ,id:this.taskId};
 
